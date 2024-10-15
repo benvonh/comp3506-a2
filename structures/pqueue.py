@@ -133,6 +133,9 @@ class PriorityQueue:
         use the DynamicArray build_from_list function. You must use
         only O(1) extra space.
         """
+        self._arr = input_list
+        self.sort()
+        self._max_priority = self._arr[self._arr.get_size() - 1].get_key()
 
     def sort(self) -> DynamicArray:
         """
@@ -145,4 +148,24 @@ class PriorityQueue:
         destroyed and will not be used again (hence returning the underlying
         array back to the caller).
         """
+        if self.is_empty():
+            return self._arr
+
+        ix = self._arr.get_size() - 1
+
+        while ix > 0:
+            self._heapify(ix)
+            self._arr[0], self._arr[ix] = self._arr[ix], self._arr[0]
+            ix -= 1
+
         return self._arr
+
+    def _heapify(self, start_ix: int = 0) -> None:
+        ix = start_ix
+        while ix > 0:
+            parent_ix = self._parent(ix)
+
+            if self._arr[parent_ix].get_key() < self._arr[ix].get_key():
+                self._arr[ix], self._arr[parent_ix] = self._arr[parent_ix], self._arr[ix]
+
+            ix -= 1
