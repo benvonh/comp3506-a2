@@ -6,6 +6,7 @@ Joel Mackenzie and Vladimir Morozov
 
 from typing import Any
 from structures.bit_vector import BitVector
+from structures.util import object_to_byte_array
 
 class BloomFilter:
     """
@@ -35,6 +36,7 @@ class BloomFilter:
         # You should use max_keys to decide how many bits your bitvector
         # should have, and allocate it accordingly.
         self._data = BitVector()
+        self._data.allocate(max_keys)
         
         # More variables here if you need, of course
     
@@ -51,7 +53,7 @@ class BloomFilter:
         Insert a key into the Bloom filter.
         Time complexity for full marks: O(1)
         """
-        pass
+        bits = object_to_byte_array(key)
 
     def contains(self, key: Any) -> bool:
         """
@@ -73,7 +75,7 @@ class BloomFilter:
         Boolean helper to tell us if the structure is empty or not
         Time complexity for full marks: O(1)
         """
-        pass
+        
 
     def get_capacity(self) -> int:
         """
@@ -81,5 +83,4 @@ class BloomFilter:
         BitVector can currently maintain.
         Time complexity for full marks: O(1)
         """
-        pass
-
+        return self._data.get_size()

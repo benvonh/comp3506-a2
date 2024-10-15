@@ -32,7 +32,7 @@ class PriorityQueue:
         """
         Given index ix, return the index of the parent
         """
-        return (ix) // 2
+        return ix // 2
 
     def insert(self, priority: int, data: Any) -> None:
         """
@@ -82,6 +82,7 @@ class PriorityQueue:
             return None
         return self._arr[0].get_value()
 
+    # FIXME: ERROR AFTER 6001 INSERTIONS AND REMOVE_MIN
     def remove_min(self) -> Any:
         """
         Extract (remove) the highest priority value from the queue.
@@ -95,8 +96,8 @@ class PriorityQueue:
 
         cur = 1
         while cur < self.get_size():
-            left = cur * 2
-            right = cur * 2 + 1
+            left = cur * 2 + 1
+            right = cur * 2 + 2
 
             smallest = cur
             if left < self.get_size() and self._arr[smallest].get_key() > self._arr[left].get_key():

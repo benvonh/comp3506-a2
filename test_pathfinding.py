@@ -22,7 +22,8 @@ from structures.graph import Graph, LatticeGraph
 from structures.dynamic_array import DynamicArray
 
 # Configuration: The time (in seconds) to sleep between moves in the viz
-ADVANCE = 0.01  # 10ms
+# ADVANCE = 0.01  # 10ms
+ADVANCE = 0.05  # 50ms
 
 class MazeDraw:
     """
