@@ -44,49 +44,21 @@ def test_pqueue() -> None:
     my_pq.insert(5, "priority 5")
     assert my_pq.remove_min() == "priority 5"
 
-    for i in range(1, 20, 2):
+    for i in range(0, 20):
         my_pq.insert(i, i)
 
-    print('#####################')
-    for i in range(my_pq._arr.get_size()):
-        print(my_pq._arr[i].get_key(), my_pq._arr[i].get_value())
-    print('#####################')
-    # assert my_pq.remove_min() == 0
-    # assert my_pq.remove_min() == 1
-    # assert my_pq.remove_min() == 2
-    # assert my_pq.remove_min() == 3
-    # assert my_pq.remove_min() == 4
-    # assert my_pq.remove_min() == 5
-    # assert my_pq.remove_min() == 6
-    # assert my_pq.remove_min() == 7
-    # assert my_pq.remove_min() == 8
-    # assert my_pq.remove_min() == 9
-    # assert my_pq.remove_min() == 10
-    # assert my_pq.remove_min() == "priority value 10 item"
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
-    print(my_pq.remove_min())
+    assert my_pq.remove_min() == 0
+    assert my_pq.remove_min() == 1
+    assert my_pq.remove_min() == 2
+    assert my_pq.remove_min() == 3
+    assert my_pq.remove_min() == 4
+    assert my_pq.remove_min() == 5
+    assert my_pq.remove_min() == 6
+    assert my_pq.remove_min() == 7
+    assert my_pq.remove_min() == 8
+    assert my_pq.remove_min() == 9
+    assert my_pq.remove_min() == "priority value 10 item"
+    assert my_pq.remove_min() == 10
 
 
 def test_map() -> None:
