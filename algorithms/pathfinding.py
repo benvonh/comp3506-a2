@@ -42,36 +42,35 @@ def bfs_traversal(
     predecessors = DynamicArray()
     Q = PriorityQueue()
     Q.insert_fifo(origin)
-    # Search
-    # FIXME: 
-    while not Q.is_empty():
+    visited_order.append(origin)
+    searching = True
+    while not Q.is_empty() and searching:
         v: int = Q.remove_min()
-        print('===================================')
-        print('v: ', v)
-        visited_order.append(v)
-        print('visited: ', visited_order)
-        if v == goal:
-            break
         for node in graph.get_neighbours(v):
             w: int = node.get_id()
-            if not visited_order.has(w) and not Q.has(w):
-                print('w: ', w)
-                Q.insert_fifo(w)
-
-    # if not searching: # otherwise failed to find goal
-    #     # Backtrack
-    #     backtrack_path = DynamicArray()
-    #     backtrack: int = predecessors[predecessors.get_size() - 1]
-    #     backtrack_path.append(backtrack)
-    #     while backtrack != origin:
-    #         idx = visited_order.index_at(backtrack)
-    #         backtrack = predecessors[idx - 1]
-    #         backtrack_path.append(backtrack)
-
-    #     # Flip order
-    #     for i in range(backtrack_path.get_size() - 1, -1, -1):
-    #         path.append(backtrack_path[i])
-    #     path.append(goal)
+            if w == goal:
+                visited_order.append(w)
+                predecessors.append(v)
+                searching = False
+                break
+            if not visited_order.has(w):
+                visited_order.append(w)
+                predecessors.append(v)
+                if not Q.has(w):
+                    Q.insert_fifo(w)
+    if not searching: # otherwise failed to find goal
+        # Backtrack
+        backtrack_path = DynamicArray()
+        backtrack: int = predecessors[predecessors.get_size() - 1]
+        backtrack_path.append(backtrack)
+        while backtrack != origin:
+            idx = visited_order.index_at(backtrack)
+            backtrack = predecessors[idx - 1]
+            backtrack_path.append(backtrack)
+        # Flip order
+        for i in range(backtrack_path.get_size() - 1, -1, -1):
+            path.append(backtrack_path[i])
+        path.append(goal)
     ############################################################################
 
     # Return the path and the visited nodes list
