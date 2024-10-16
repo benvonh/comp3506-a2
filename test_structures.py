@@ -87,6 +87,10 @@ def test_map() -> None:
     to make sure your data structure works. Make sure you capture all functions
     including any resizing that is done.
     """
+    assert my_map[1] == "value_for_key_1"
+    assert my_map[2] == "Barry rules"
+    assert my_map[3] == "value_for_key_3"
+    assert my_map[10] == "value_for_key_10"
 
 
 def test_bloom() -> None:

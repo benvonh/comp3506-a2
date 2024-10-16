@@ -66,6 +66,22 @@ class PriorityQueue:
                 return True
         return False
 
+    def update(self, value: Any, new_prio: int) -> None:
+        """
+        Self-written
+        """
+        updated = False
+        for i in range(self._arr.get_size()):
+            if self._arr[i].get_value() == value:
+                self._arr[i].update_key(new_prio)
+                updated = True
+                break
+
+        if updated:
+            self.sort()
+        else:
+            self.insert(new_prio, value)
+
     def get_min_priority(self) -> Any:
         """
         Return the priority of the min element
@@ -160,7 +176,7 @@ class PriorityQueue:
 
         return self._arr
 
-    def _heapify(self, start_ix: int = 0) -> None:
+    def _heapify(self, start_ix: int) -> None:
         ix = start_ix
         while ix > 0:
             parent_ix = self._parent(ix)

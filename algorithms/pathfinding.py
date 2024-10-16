@@ -76,6 +76,7 @@ def bfs_traversal(
     # Return the path and the visited nodes list
     return (path, visited_order)
 
+
 def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     """
     Task 2.2: Dijkstra Traversal
@@ -97,12 +98,33 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
 
     # ALGO GOES HERE
     ############################################################################
+    visited = DynamicArray()
+
+    distances = Map()
+    distances[origin] = 0
+
     pq = PriorityQueue()
-    # for v in graph
+    pq.insert(0, origin)
+
+    while not pq.is_empty():
+        v: int = pq.remove_min()
+        visited.append(v)
+        for node, weight in graph.get_neighbours(v):
+            u: int = node.get_id()
+            new_dist = distances[v] + weight
+            old_dist = distances.find(u)
+
+            dist = new_dist if old_dist is None else min(new_dist, old_dist)
+
+            if not visited.has(u):
+                pq.update(u, dist)
+
+            distances[u] = dist
+
     ############################################################################
 
-    # Return the DynamicArray containing Entry types
-    return valid_locations
+    return distances._data
+    # return valid_locations
 
 
 def dfs_traversal(
