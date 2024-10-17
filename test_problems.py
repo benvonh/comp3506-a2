@@ -33,21 +33,24 @@ def test_maybe():
     """
     print ("=== Maybe Maybe Maybe ===")
     # 0. Set some params; you can tweak these later.
-    K = 17 # 17-mers
-    DB_SIZE = 100000 # 100k DB entries
-    Q_SIZE = 1000 # 1000 queries
+    K = 7116 # 17-mers
+    DB_SIZE = 95549 # 100k DB entries
+    Q_SIZE = 73564 # 1000 queries
 
     # 1. Generate a 'database' with some k-mers
+    print('Generating database...')
     kmer_db = ["".join(random.choice("ACGT") for _ in range(K)) for i in range(DB_SIZE)]
 
     # 2. Generate a set of query k-mers. We could generate these randomly, but
     # here we might like to sample from the db to ensure the k-mers we're
     # looking for actually exist; we can test "negative" queries later...
+    print('Generating samples...')
     query_sample = random.sample(kmer_db, Q_SIZE)
 
     # Now you need to issue the queries. The testing is up to you from here,
     # because there are many ways to solve this problem. However, there are
     # some definite hints on how to solve this in the spec.
+    print('Running algorithm...')
     output = maybe_maybe_maybe(kmer_db, query_sample)
 
     matches = []
@@ -59,9 +62,9 @@ def test_maybe():
         else:
             mismatches.append(kmer)
 
-    print("Matches:", matches)
-    print("Mismatches:", mismatches)
-    print(f"False Positive Rate: {len(mismatches) / len(query_sample):.2f}")
+    print("Matches:", len(matches))
+    print("Mismatches:", len(mismatches))
+    print(f"False Positive Rate: {(len(mismatches) / len(query_sample)):.2f}")
 
 
 def test_dora(graph: Graph):

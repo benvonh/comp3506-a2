@@ -70,12 +70,20 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
 
     bloomFilter = BloomFilter(len(database))
 
-    for kmer in database:
+    for i, kmer in enumerate(database):
         bloomFilter.insert(kmer)
+        if i % (len(database) // 100) == 0:
+            print(f'Bloom Filter: Insert...{i//len(database)}% ', end='\r')
 
-    for kmer in query:
+    print('Bloom Filter: Insert...100%')
+
+    for i, kmer in enumerate(query):
         if bloomFilter.contains(kmer):
             answer.append(kmer)
+        if i % (len(query) // 100) == 0:
+            print(f'Bloom Filter: Search...{i//len(query)}% ', end='\r')
+
+    print('Bloom Filter: Search...100%')
 
     return answer
 

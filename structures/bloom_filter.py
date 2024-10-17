@@ -31,16 +31,18 @@ class BloomFilter:
     to make your own hash function (bytes are just integers in the range
     [0-255] of course).
     """
-    PRIME = 1_000_003
+    PRIME = 100_000_007
+    NHASH = 7
 
     def __init__(self, max_keys: int) -> None:
         # You should use max_keys to decide how many bits your bitvector
         # should have, and allocate it accordingly.
-        self._size = 2 * max_keys
+        self._size = 10 * max_keys
         self._data = BitVector()
         self._data.allocate(self._size)
         
         # More variables here if you need, of course
+        self._empty = True
     
     def __str__(self) -> str:
         """
@@ -59,37 +61,31 @@ class BloomFilter:
         if type(key) is int:
             h = key
         elif type(key) is str:
-            mask = (1 << self._size) - 1
+            mask = (1 << 32) - 1
             for c in key:
-                h = (h << 5 & mask) | (h >> (self._size - 5))
+                h = (h << 5 & mask) | (h >> 27)
                 h += ord(c)
         else:
             raise Exception("In Bloom Filter hash code, key is neither an int or str")
 
         return h
 
-    def compression1(self, y: int) -> int:
-        """
-        MAD
-        """
-        return ((17 * y + 31) % self.PRIME) % self._size
-
-    def compression2(self, y: int) -> int:
-        """
-        MAD
-        """
-        return ((13 * y + 71) % self.PRIME) % self._size
-
     def hash(self, key: Any) -> Iterator[int]:
-        hashcode = self.hash_code(key)
-        yield self.compression1(hashcode)
-        yield self.compression2(hashcode)
+        """
+        Compression function with MAD
+        """
+        y = self.hash_code(key)
+        b = [ 2, 3, 5, 7, 11, 13, 17 ]
+        a = [ 83, 89, 97, 101, 103, 107, 109 ]
+        for i in range(self.NHASH):
+            yield ((a[i] * y + b[i]) % self.PRIME) % self._size
 
     def insert(self, key: Any) -> None:
         """
         Insert a key into the Bloom filter.
         Time complexity for full marks: O(1)
         """
+        self._empty = False
         for i in self.hash(key):
             self._data.set_at(i)
 
@@ -117,10 +113,7 @@ class BloomFilter:
         Boolean helper to tell us if the structure is empty or not
         Time complexity for full marks: O(1)
         """
-        for i in range(self._data.get_size()):
-            if self._data.get_at(i) == 1:
-                return False
-        return True
+        return self._empty
 
     def get_capacity(self) -> int:
         """
