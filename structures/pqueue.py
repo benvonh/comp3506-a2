@@ -105,6 +105,7 @@ class PriorityQueue:
         """
         if self.is_empty():
             return None
+
         result = self._arr[0]
         self._arr[0] = self._arr[self.get_size() - 1]
         self._arr.remove_at(self.get_size() - 1)
@@ -113,17 +114,13 @@ class PriorityQueue:
         while cur < self.get_size():
             left = cur * 2 + 1
             right = cur * 2 + 2
-
             smallest = cur
             if left < self.get_size() and self._arr[smallest].get_key() > self._arr[left].get_key():
                 smallest = left
             if right < self.get_size() and self._arr[smallest].get_key() > self._arr[right].get_key():
                 smallest = right
             if smallest != cur:
-                self._arr[cur], self._arr[smallest] = (
-                    self._arr[smallest],
-                    self._arr[cur],
-                )
+                self._arr[cur], self._arr[smallest] = (self._arr[smallest], self._arr[cur])
                 cur = smallest
             else:
                 break
@@ -167,21 +164,49 @@ class PriorityQueue:
         if self.is_empty():
             return self._arr
 
+        # Create a max heap
+        # It assumes the heap is partially sorted
         ix = self._arr.get_size() - 1
-
         while ix > 0:
-            self._heapify(ix)
-            self._arr[0], self._arr[ix] = self._arr[ix], self._arr[0]
+            ixp = self._parent(ix)
+            if self._arr[ixp].get_key() < self._arr[ix].get_key():
+                self._arr[ix], self._arr[ixp] = self._arr[ixp], self._arr[ix]
             ix -= 1
+
+        # While heap has space...
+        end = self._arr.get_size() - 1
+        while end > 0:
+            # Swap max with last
+            self._arr[0], self._arr[end] = self._arr[end], self._arr[0]
+            # Heapify
+            self._heapify(end)
+            end -= 1
 
         return self._arr
 
-    def _heapify(self, start_ix: int) -> None:
-        ix = start_ix
-        while ix > 0:
-            parent_ix = self._parent(ix)
+    def _heapify(self, end: int) -> None:
+        ix = 0
+        while ix * 2 + 1 < end:
+            left = ix * 2 + 1
+            right = ix * 2 + 2
 
-            if self._arr[parent_ix].get_key() < self._arr[ix].get_key():
-                self._arr[ix], self._arr[parent_ix] = self._arr[parent_ix], self._arr[ix]
+            action = 0 # 1 for left, 2 for right
+            larger = self._arr[ix].get_key()
 
-            ix -= 1
+            if self._arr[left].get_key() > larger:
+                larger = self._arr[left].get_key()
+                action = 1
+            if self._arr[right].get_key() > larger:
+                action = 2
+
+            match action:
+                case 0:
+                    return
+                case 1:
+                    self._arr[left], self._arr[ix] = self._arr[ix], self._arr[left]
+                    ix = left
+                case 2:
+                    self._arr[right], self._arr[ix] = self._arr[ix], self._arr[right]
+                    ix = right
+                case _:
+                    raise Exception("Bad programmer error")
