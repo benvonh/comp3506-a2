@@ -27,7 +27,7 @@ class Map:
     An implementation of the Map ADT.
     The provided methods consume keys and values via the Entry type.
     """
-    ALLOCATION = 1_048_576
+    ALLOCATION = 262_144
 
     def __init__(self) -> None:
         """
