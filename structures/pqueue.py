@@ -164,49 +164,28 @@ class PriorityQueue:
         if self.is_empty():
             return self._arr
 
-        # Create a max heap
-        # It assumes the heap is partially sorted
-        ix = self._arr.get_size() - 1
-        while ix > 0:
-            ixp = self._parent(ix)
-            if self._arr[ixp].get_key() < self._arr[ix].get_key():
-                self._arr[ix], self._arr[ixp] = self._arr[ixp], self._arr[ix]
-            ix -= 1
+        n = self._arr.get_size()
 
-        # While heap has space...
-        end = self._arr.get_size() - 1
-        while end > 0:
-            # Swap max with last
+        for i in range(n // 2 - 1, -1, -1):
+            self._heapify(i, n)
+
+        for end in range(n - 1, 0, -1):
             self._arr[0], self._arr[end] = self._arr[end], self._arr[0]
-            # Heapify
-            self._heapify(end)
-            end -= 1
+            self._heapify(0, end)
 
         return self._arr
 
-    def _heapify(self, end: int) -> None:
-        ix = 0
-        while ix * 2 + 1 < end:
-            left = ix * 2 + 1
-            right = ix * 2 + 2
+    def _heapify(self, node: int, end: int) -> None:
+        left = node * 2 + 1
+        right = node * 2 + 2
+        larger = node
 
-            action = 0 # 1 for left, 2 for right
-            larger = self._arr[ix].get_key()
+        if left < end and self._arr[left].get_key() > self._arr[larger].get_key():
+            larger = left
 
-            if self._arr[left].get_key() > larger:
-                larger = self._arr[left].get_key()
-                action = 1
-            if self._arr[right].get_key() > larger:
-                action = 2
+        if right < end and self._arr[right].get_key() > self._arr[larger].get_key():
+            larger = right
 
-            match action:
-                case 0:
-                    return
-                case 1:
-                    self._arr[left], self._arr[ix] = self._arr[ix], self._arr[left]
-                    ix = left
-                case 2:
-                    self._arr[right], self._arr[ix] = self._arr[ix], self._arr[right]
-                    ix = right
-                case _:
-                    raise Exception("Bad programmer error")
+        if larger != node:
+            self._arr[node], self._arr[larger] = self._arr[larger], self._arr[node]
+            self._heapify(larger, end)
