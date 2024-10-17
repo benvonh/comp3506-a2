@@ -68,10 +68,16 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     """
     answer = [] 
 
-    # DO THE THING
+    bloomFilter = BloomFilter(len(database))
+
+    for kmer in database:
+        bloomFilter.insert(kmer)
+
+    for kmer in query:
+        if bloomFilter.contains(kmer):
+            answer.append(kmer)
 
     return answer
-
 
 
 def dora(graph: Graph, start: int, symbol_sequence: str,
@@ -193,5 +199,3 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     # DO THE THING
 
     return (best_offer_id, best_offer_cost)
-
-

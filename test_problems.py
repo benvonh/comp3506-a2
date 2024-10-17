@@ -50,6 +50,18 @@ def test_maybe():
     # some definite hints on how to solve this in the spec.
     output = maybe_maybe_maybe(kmer_db, query_sample)
 
+    matches = []
+    mismatches = []
+
+    for kmer in output:
+        if kmer in query_sample:
+            matches.append(kmer)
+        else:
+            mismatches.append(kmer)
+
+    print("Matches:", matches)
+    print("Mismatches:", mismatches)
+    print(f"False Positive Rate: {len(mismatches) / len(query_sample):.2f}")
 
 
 def test_dora(graph: Graph):
@@ -185,4 +197,3 @@ if __name__ == "__main__":
 
     if args.labyrinth:
         test_labyrinth()
-
