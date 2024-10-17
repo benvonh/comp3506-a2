@@ -52,9 +52,9 @@ class Map:
             self._size += 1
             old_val = None
         else:
-            old_val = self._data[ix]
+            old_val = self._data[ix].get_value()
 
-        self._data[ix] = entry.get_value()
+        self._data[ix] = entry
         return old_val
 
     def insert_kv(self, key: Any, value: Any) -> Any | None:
@@ -96,7 +96,7 @@ class Map:
         """
         e = Entry(key, None)
         ix = e.get_hash() % self.ALLOCATION
-        return self._data[ix]
+        return self._data[ix].get_value()
 
     def __getitem__(self, key: Any) -> Any | None:
         """
