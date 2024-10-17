@@ -96,7 +96,8 @@ class Map:
         """
         e = Entry(key, None)
         ix = e.get_hash() % self.ALLOCATION
-        return self._data[ix].get_value()
+        if self._data[ix] is not None:
+            return self._data[ix].get_value()
 
     def __getitem__(self, key: Any) -> Any | None:
         """
