@@ -52,7 +52,7 @@ class Map:
             self._size += 1
             old_val = None
         else:
-            old_val = self._data[ix].get_value()
+            old_val = self._data[ix]
 
         self._data[ix] = entry.get_value()
         return old_val
