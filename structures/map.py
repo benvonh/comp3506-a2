@@ -84,8 +84,9 @@ class Map:
         """
         e = Entry(key, None)
         ix = e.get_hash() % self.ALLOCATION
-        self._data[ix] = None
-        self._size -= 1
+        if self._data[ix] is not None:
+            self._data[ix] = None
+            self._size -= 1
 
     def find(self, key: Any) -> Any | None:
         """
