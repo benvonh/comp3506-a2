@@ -36,6 +36,7 @@ class Map:
         to initialise your map.
         """
         self._data = DynamicArray(self.ALLOCATION)
+        self._data._size = self.ALLOCATION
         self._size = 0
 
     def insert(self, entry: Entry) -> Any | None:
@@ -108,10 +109,10 @@ class Map:
         """
         Time complexity for full marks: O(1)
         """
-        return self._data.get_size()
+        return self._size
 
     def is_empty(self) -> bool:
         """
         Time complexity for full marks: O(1)
         """
-        return self._data.is_empty()
+        return self._size == 0
