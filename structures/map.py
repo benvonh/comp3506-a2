@@ -27,6 +27,7 @@ class Map:
     An implementation of the Map ADT.
     The provided methods consume keys and values via the Entry type.
     """
+    ALLOCATION = 1_048_576
 
     def __init__(self) -> None:
         """
@@ -34,7 +35,8 @@ class Map:
         You are free to make any changes you find suitable in this function
         to initialise your map.
         """
-        self._data = DynamicArray()
+        self._data = DynamicArray(self.ALLOCATION)
+        self._size = 0
 
     def insert(self, entry: Entry) -> Any | None:
         """
@@ -43,12 +45,10 @@ class Map:
         None otherwise. (We will not use None as a key or a value in our tests).
         Time complexity for full marks: O(1*)
         """
-        ix = entry.get_hash()
-
-        while ix > self._data.get_size():
-            self._data.__resize()
+        ix = entry.get_hash() % self.ALLOCATION
 
         if self._data[ix] is None:
+            self._size += 1
             old_val = None
         else:
             old_val = self._data[ix].get_value()
@@ -82,8 +82,9 @@ class Map:
         Time complexity for full marks: O(1*)
         """
         e = Entry(key, None)
-        ix = e.get_hash()
+        ix = e.get_hash() % self.ALLOCATION
         self._data[ix] = None
+        self._size -= 1
 
     def find(self, key: Any) -> Any | None:
         """
@@ -92,7 +93,7 @@ class Map:
         Time complexity for full marks: O(1*)
         """
         e = Entry(key, None)
-        ix = e.get_hash()
+        ix = e.get_hash() % self.ALLOCATION
         return self._data[ix]
 
     def __getitem__(self, key: Any) -> Any | None:

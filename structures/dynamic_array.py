@@ -15,10 +15,10 @@ class DynamicArray:
     solution we provided for A1.
     """
 
-    def __init__(self) -> None:
-        self._data = [None] * 128
+    def __init__(self, cap: int = 128) -> None:
+        self._data = [None] * cap
         self._size = 0
-        self._capacity = 128
+        self._capacity = cap
 
     def __str__(self) -> str:
         """
@@ -40,6 +40,9 @@ class DynamicArray:
         for i in range(self._size):
             new_list[i] = self._data[i]
         self._data = new_list
+
+    def expand(self) -> None:
+        self.__resize()
 
     def build_from_list(self, inlist: list) -> None:
         """
