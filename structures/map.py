@@ -43,14 +43,18 @@ class Map:
         None otherwise. (We will not use None as a key or a value in our tests).
         Time complexity for full marks: O(1*)
         """
-        entry_hash = entry.get_hash()
-        for i in range(self._data.get_size()):
-            if self._data[i].get_hash() == entry_hash:
-                old_val = self._data[i].get_value()
-                self._data[i].update_value(entry.get_value())
-                return old_val
-            
-        self._data.append(entry)
+        ix = entry.get_hash()
+
+        while ix > self._data.get_size():
+            self._data.__resize()
+
+        if self._data[ix] is None:
+            old_val = None
+        else:
+            old_val = self._data[ix].get_value()
+
+        self._data[ix] = entry.get_value()
+        return old_val
 
     def insert_kv(self, key: Any, value: Any) -> Any | None:
         """
@@ -77,12 +81,9 @@ class Map:
         data structure. Don't return anything.
         Time complexity for full marks: O(1*)
         """
-        entry = Entry(key, None)
-        key_hash = entry.get_hash()
-        for i in range(self._data.get_size()):
-            if self._data[i].get_hash() == key_hash:
-                self._data.remove_at(i)
-                return
+        e = Entry(key, None)
+        ix = e.get_hash()
+        self._data[ix] = None
 
     def find(self, key: Any) -> Any | None:
         """
@@ -90,11 +91,9 @@ class Map:
         exists; return None otherwise.
         Time complexity for full marks: O(1*)
         """
-        entry = Entry(key, None)
-        key_hash = entry.get_hash()
-        for i in range(self._data.get_size()):
-            if self._data[i].get_hash() == key_hash:
-                return self._data[i].get_value()
+        e = Entry(key, None)
+        ix = e.get_hash()
+        return self._data[ix]
 
     def __getitem__(self, key: Any) -> Any | None:
         """

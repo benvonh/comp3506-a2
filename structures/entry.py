@@ -67,12 +67,18 @@ class Entry(Hashable):
         assignment, your universe could be something like integers in
         [0, 2^32-1].
         """
-        mask = (1 << 32) - 1
-        h = 0
-        for byte in object_to_byte_array(self._key):
-            h = (h << 5 & mask) | (h >> 27)
-            h += byte
-        return h
+        if type(self._key) is int:
+            return self._key
+        
+        if type(self._key) is str:
+            mask = (1 << 32) - 1
+            h = 0
+            for byte in self._key:
+                h = (h << 5 & mask) | (h >> 27)
+                h += byte
+            return h
+        
+        raise Exception("In Entry get_hash(), key is neither an int or str")
 
 class Compound:
     """

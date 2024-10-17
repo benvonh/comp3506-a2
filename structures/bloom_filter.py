@@ -56,19 +56,18 @@ class BloomFilter:
         """
         Cyclic Shift
         """
-        h: int = 0
-
         if type(key) is int:
-            h = key
-        elif type(key) is str:
+            return key
+
+        if type(key) is str:
+            h = 0
             mask = (1 << 32) - 1
             for c in key:
                 h = (h << 5 & mask) | (h >> 27)
                 h += ord(c)
-        else:
-            raise Exception("In Bloom Filter hash code, key is neither an int or str")
+            return h
 
-        return h
+        raise Exception("In Bloom Filter hash code, key is neither an int or str")
 
     def hash(self, key: Any) -> Iterator[int]:
         """
