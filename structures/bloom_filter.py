@@ -4,7 +4,7 @@ The University of Queensland
 Joel Mackenzie and Vladimir Morozov
 """
 
-from typing import Any
+from typing import Any, Iterator
 from structures.bit_vector import BitVector
 from structures.util import object_to_byte_array
 
@@ -31,12 +31,14 @@ class BloomFilter:
     to make your own hash function (bytes are just integers in the range
     [0-255] of course).
     """
+    PRIME = 1_000_003
 
     def __init__(self, max_keys: int) -> None:
         # You should use max_keys to decide how many bits your bitvector
         # should have, and allocate it accordingly.
+        self._size = 2 * max_keys
         self._data = BitVector()
-        self._data.allocate(max_keys)
+        self._data.allocate(self._size)
         
         # More variables here if you need, of course
     
@@ -48,12 +50,48 @@ class BloomFilter:
         """
         pass
 
+    def hash_code(self, key: Any) -> int:
+        """
+        Cyclic Shift
+        """
+        h: int = 0
+
+        if type(key) is int:
+            h = key
+        elif type(key) is str:
+            mask = (1 << self._size) - 1
+            for c in key:
+                h = (h << 5 & mask) | (h >> (self._size - 5))
+                h += ord(c)
+        else:
+            raise Exception("In Bloom Filter hash code, key is neither an int or str")
+
+        return h
+
+    def compression1(self, y: int) -> int:
+        """
+        MAD
+        """
+        return ((17 * y + 31) % self.PRIME) % self._size
+
+    def compression2(self, y: int) -> int:
+        """
+        MAD
+        """
+        return ((13 * y + 71) % self.PRIME) % self._size
+
+    def hash(self, key: Any) -> Iterator[int]:
+        hashcode = self.hash_code(key)
+        yield self.compression1(hashcode)
+        yield self.compression2(hashcode)
+
     def insert(self, key: Any) -> None:
         """
         Insert a key into the Bloom filter.
         Time complexity for full marks: O(1)
         """
-        bits = object_to_byte_array(key)
+        for i in self.hash(key):
+            self._data.set_at(i)
 
     def contains(self, key: Any) -> bool:
         """
@@ -61,7 +99,10 @@ class BloomFilter:
         over k are set. False otherwise.
         Time complexity for full marks: O(1)
         """
-        pass
+        for i in self.hash(key):
+            if self._data.get_at(i) == 0:
+                return False
+        return True
 
     def __contains__(self, key: Any) -> bool:
         """
@@ -69,13 +110,17 @@ class BloomFilter:
         `if key in my_bloom_filter:`
         Time complexity for full marks: O(1)
         """
+        return self.contains(key)
 
     def is_empty(self) -> bool:
         """
         Boolean helper to tell us if the structure is empty or not
         Time complexity for full marks: O(1)
         """
-        
+        for i in range(self._data.get_size()):
+            if self._data.get_at(i) == 1:
+                return False
+        return True
 
     def get_capacity(self) -> int:
         """
@@ -83,4 +128,4 @@ class BloomFilter:
         BitVector can currently maintain.
         Time complexity for full marks: O(1)
         """
-        return self._data.get_size()
+        return self._size
