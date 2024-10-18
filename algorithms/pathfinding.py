@@ -6,6 +6,7 @@ Joel Mackenzie and Vladimir Morozov
 You may wish to import your data structures to help you with some of the
 problems. Or maybe not. We did it for you just in case.
 """
+
 from structures.entry import Entry
 from structures.dynamic_array import DynamicArray
 from structures.graph import Graph, LatticeGraph

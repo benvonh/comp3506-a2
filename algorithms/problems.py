@@ -24,6 +24,7 @@ There will be hidden tests in each category that will be published only after th
 You may wish to import your data structures to help you with some of the
 problems. Or maybe not. We did it for you just in case.
 """
+
 from structures.entry import Entry, Compound, Offer
 from structures.dynamic_array import DynamicArray
 from structures.linked_list import DoublyLinkedList
@@ -33,7 +34,6 @@ from structures.map import Map
 from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
 from structures.util import Hashable
-
 
 
 def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
@@ -70,20 +70,12 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
 
     bloomFilter = BloomFilter(len(database))
 
-    for i, kmer in enumerate(database):
+    for kmer in database:
         bloomFilter.insert(kmer)
-        if i % (len(database) // 100) == 0:
-            print(f'Bloom Filter: Insert...{i//len(database)}% ', end='\r')
 
-    print('Bloom Filter: Insert...100%')
-
-    for i, kmer in enumerate(query):
+    for kmer in query:
         if bloomFilter.contains(kmer):
             answer.append(kmer)
-        if i % (len(query) // 100) == 0:
-            print(f'Bloom Filter: Search...{i//len(query)}% ', end='\r')
-
-    print('Bloom Filter: Search...100%')
 
     return answer
 
