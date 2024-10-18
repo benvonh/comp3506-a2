@@ -120,9 +120,12 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
                 pq.update(u, dist)
 
             distances[u] = dist
+
+    for e in distances.iterate():
+        valid_locations.append(e)
     ############################################################################
 
-    return distances._data
+    return valid_locations
 
 
 def dfs_traversal(

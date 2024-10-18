@@ -18,7 +18,7 @@ Note that if you opt to not use hashing, then you can simply override the
 get_hash function to return -1 for example.
 """
 
-from typing import Any
+from typing import Any, Iterator
 from structures.entry import Entry
 from structures.dynamic_array import DynamicArray
 
@@ -38,6 +38,18 @@ class Map:
         self._data = DynamicArray(self.ALLOCATION)
         self._data._size = self.ALLOCATION
         self._size = 0
+
+    def iterate(self) -> Iterator[Entry]:
+        counter = 0 # hopefully makes this faster
+        for i in range(self.ALLOCATION):
+            if self._data[i] is not None:
+                yield self._data[i]
+                counter += 1
+            # maybe removes pointless iterating
+            # as size is known and the rest could
+            # be nothing but None
+            if counter == self._size:
+                break
 
     def insert(self, entry: Entry) -> Any | None:
         """
